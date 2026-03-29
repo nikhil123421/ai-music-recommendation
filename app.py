@@ -32,18 +32,17 @@ def get_time_context():
     elif current_hour < 18: return "☀️ Daytime energy"
     else: return "🌙 Night mode"
 
-# --- 3. Streamlit UI Build (English Interface) ---
+# Streamlit UI 
 st.title("📻 AI Hindi Music Radio")
 st.write("Pick your mood and I'll find a random Hindi track for you!")
 
-# Input (English UI)
+# Input Box
 user_mood = st.selectbox("How are you feeling right now?", list(vibe_lookup.keys()))
 
-# The Generate Button
+# Generating Button
 if st.button("🎲 Play a Random Hindi Song", type="primary", use_container_width=True):
     with st.spinner(f"Searching for the perfect {user_mood.lower()} track..."):
         
-        # Logic calculations
         vibe_data = vibe_lookup[user_mood]
         selected_style = random.choice(vibe_data["styles"])
         
@@ -58,20 +57,18 @@ if st.button("🎲 Play a Random Hindi Song", type="primary", use_container_widt
             if not search_results:
                 st.warning("Couldn't find an exact match. Try clicking again!")
             else:
-                # Randomly select ONE track from the pool
+                # Randomly select one track from the search results
                 chosen_track = random.choice(search_results)
                 song_title = chosen_track.get('title', 'Unknown Track')
                 yt_video_id = chosen_track.get('videoId')
                 
                 if yt_video_id:
-                    # --- UI: ONLY SHOW THE SONG NAME ---
+                    # Display the song title
                     st.markdown("---")
                     st.markdown(f"<h2 style='text-align: center; color: #FF4B4B;'>🎶 {song_title}</h2>", unsafe_allow_html=True)
                     st.markdown(f"<p style='text-align: center; color: gray;'>{get_time_context()}</p>", unsafe_allow_html=True)
                     st.markdown("---")
-                    
-                    # --- INVISIBLE AUTOPLAY AUDIO ---
-                    # The iframe is hidden (0x0) and set to autoplay
+                
                     player_html = f"""
                         <iframe width="0" height="0" 
                                 src="https://www.youtube.com/embed/{yt_video_id}?autoplay=1" 
